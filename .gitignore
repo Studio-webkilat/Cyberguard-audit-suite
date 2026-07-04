@@ -8,3 +8,7 @@ logs/*.db
 reports/*.pdf
 config_secrets.py
 .env
+*.db
+database.db
+__pycache__/
+.DS_Store
