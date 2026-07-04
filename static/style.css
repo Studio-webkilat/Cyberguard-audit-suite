@@ -14,7 +14,9 @@ body {
     font-family: 'Orbitron', sans-serif;
     margin: 0;
     overflow-x: hidden;
-    background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    /* Efek scanline background */
+    background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                      linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
     background-size: 100% 4px, 3px 100%;
 }
 
@@ -25,6 +27,7 @@ body {
     padding: 20px;
     border-radius: 5px;
     backdrop-filter: blur(10px);
+    margin-bottom: 20px; /* Ditambahkan agar panel tidak menempel */
 }
 
 .scanline {
@@ -35,6 +38,7 @@ body {
     position: absolute;
     pointer-events: none;
     animation: scan 4s linear infinite;
+    z-index: 10;
 }
 
 @keyframes scan {
@@ -45,7 +49,26 @@ body {
 table {
     width: 100%;
     border-collapse: collapse;
-    color: white;
+    color: var(--neon-blue); /* Sinkronisasi warna teks */
+    font-size: 0.9em;
+}
+
+th {
+    color: var(--neon-purple);
+    border-bottom: 2px solid var(--neon-purple);
+    padding: 12px;
+    text-align: left;
+}
+
+td {
+    padding: 10px;
+    border-bottom: 1px solid #333;
 }
 
 tr:nth-child(even) { background: rgba(188, 19, 254, 0.1); }
+
+/* Menambah responsivitas untuk layar HP */
+@media (max-width: 768px) {
+    main { grid-template-columns: 1fr !important; }
+}
+
