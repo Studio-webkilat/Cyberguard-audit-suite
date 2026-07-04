@@ -1,10 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>SCOC V2.0 | OPERATIONS CENTER</title>
     <link rel="stylesheet" href="/static/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        :root { --neon-purple: #bf00ff; --bg-dark: #0a0a0a; }
+        body { background: var(--bg-dark); color: #00ffcc; font-family: 'Courier New', Courier, monospace; }
+        .cyber-panel { border: 1px solid var(--neon-purple); padding: 15px; background: rgba(0,0,0,0.8); }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border-bottom: 1px solid #333; padding: 10px; text-align: left; }
+    </style>
 </head>
 <body>
     <div class="scanline"></div>
@@ -17,28 +25,37 @@
             <canvas id="attackChart"></canvas>
         </div>
         <div class="cyber-panel" id="map" style="height: 300px;"></div>
-        
+
         <div class="cyber-panel" style="grid-column: span 2;">
             <table id="live-table">
                 <thead><tr><th>TIMESTAMP</th><th>IP SOURCE</th><th>THREAT LEVEL</th></tr></thead>
-                <tbody></tbody>
+                <tbody id="log-table-body"></tbody>
             </table>
         </div>
     </main>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
+        // Init Map
+        const map = L.map('map').setView([-6.2, 106.8], 5);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
+
         // WebSocket Connection
         const ws = new WebSocket(`ws://${window.location.host}/ws/live`);
+        const tableBody = document.getElementById("log-table-body");
+
         ws.onmessage = (event) => {
             const data = JSON.parse(event.data);
-            console.log("Incoming Threat:", data);
-            // Tambahkan logika update tabel di sini
+            
+            // 1. Update Tabel
+            const row = document.createElement("tr");
+            row.innerHTML = `<td>${data.time}</td><td>${data.ip}</td><td style="color:red">CRITICAL</td>`;
+            tableBody.prepend(row);
+            
+            // 2. Update Map
+            L.marker([data.lat, data.lon]).addTo(map)
+             .bindPopup(`Threat detected from ${data.ip}`).openPopup();
         };
-
-        // Init Map
-        const map = L.map('map').setView([0, 0], 2);
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
     </script>
 </body>
 </html>
