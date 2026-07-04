@@ -12,7 +12,7 @@ try:
     if not db.query(AdminUser).filter(AdminUser.username == "komandan").first():
         admin = AdminUser(
             username="komandan", 
-            hashed_password=get_password_hash("GantiPasswordKuat123!")
+            hashed_password=get_password_hash("PaswordAdmin1212")
         )
         db.add(admin)
         print("[SYSTEM] Admin 'komandan' berhasil diinisialisasi.")
