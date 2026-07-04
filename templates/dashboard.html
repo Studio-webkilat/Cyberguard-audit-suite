@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>SCOC V2.0 | OPERATIONS CENTER</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+    <div class="scanline"></div>
+    <header style="text-align: center; padding: 20px;">
+        <h1 style="text-transform: uppercase; letter-spacing: 5px; color: var(--neon-purple);">SCOC OPERATIONS CENTER</h1>
+    </header>
+
+    <main style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 20px;">
+        <div class="cyber-panel">
+            <canvas id="attackChart"></canvas>
+        </div>
+        <div class="cyber-panel" id="map" style="height: 300px;"></div>
+        
+        <div class="cyber-panel" style="grid-column: span 2;">
+            <table id="live-table">
+                <thead><tr><th>TIMESTAMP</th><th>IP SOURCE</th><th>THREAT LEVEL</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </main>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // WebSocket Connection
+        const ws = new WebSocket(`ws://${window.location.host}/ws/live`);
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            console.log("Incoming Threat:", data);
+            // Tambahkan logika update tabel di sini
+        };
+
+        // Init Map
+        const map = L.map('map').setView([0, 0], 2);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
+    </script>
+</body>
+</html>
