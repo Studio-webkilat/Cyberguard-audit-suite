@@ -28,7 +28,7 @@ def create_access_token(data: dict, expires_delta: timedelta = timedelta(hours=1
 # 4. Validasi Scanner API Key
 def validate_scanner_key(api_key: str) -> bool:
     # Dalam produksi, pindahkan ke database atau env variable
-    VALID_KEYS = [os.getenv("SCANNER_API_KEY", "SCOC-PROD-2026-KEY")]
+    VALID_KEYS = [os.getenv("SCANNER_API_KEY",)]
     return api_key in VALID_KEYS
 
 # 5. Tambahan: Fungsi Decode Token (Untuk proteksi rute)
